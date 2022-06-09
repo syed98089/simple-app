@@ -18,7 +18,8 @@ pipeline {
 
 	 stage('Nexus-artifact Upload') {
             steps {
-                       nexusArtifactUploader artifacts: [[artifactId: 'maven-project', classifier: '', file: '/var/lib/jenkins/workspace/build_job/webapp/target/webapp.war', type: 'war']], credentialsId: 'nexus_33', groupId: 'com.example.maven-project', nexusUrl: '172.31.90.105:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'simple-app', version: '1.0.0'            }
+               def readPom=readMavenPom 'pom.xml'
+                       nexusArtifactUploader artifacts: [[artifactId: 'maven-project', classifier: '', file: "/var/lib/jenkins/workspace/build_job/webapp/target/webapp-${readPom.version}.war", type: 'war']], credentialsId: 'nexus_33', groupId: 'com.example.maven-project', nexusUrl: '172.31.90.105:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'simple-app', version: "${readPom.version}"            }
         }         
 
 
